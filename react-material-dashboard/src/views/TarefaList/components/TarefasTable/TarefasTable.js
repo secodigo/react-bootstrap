@@ -5,18 +5,19 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import { makeStyles } from '@material-ui/styles';
 import {
   Card,
-  CardContent,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  IconButton
+  CardContent
+  // Table,
+  // TableBody,
+  // TableCell,
+  // TableHead,
+  // TableRow,
+  // IconButton
 } from '@material-ui/core';
 
-import TimerIcon from '@material-ui/icons/Timer';
-import DoneAllIcon from '@material-ui/icons/DoneAll';
-import DeleteIcon from '@material-ui/icons/Delete';
+// import TimerIcon from '@material-ui/icons/Timer';
+// import DoneAllIcon from '@material-ui/icons/DoneAll';
+// import DeleteIcon from '@material-ui/icons/Delete';
+import MaterialTable from 'material-table';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -38,9 +39,13 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const TarefasTable = (props) => {
-  const { className, tarefas, ...rest } = props;
-
+const TarefasTable = ({
+  className,
+  tarefas,
+  navigateToEdit,
+  deleteAction,
+  ...rest
+}) => {
   const classes = useStyles();
 
   return (
@@ -48,48 +53,36 @@ const TarefasTable = (props) => {
       <CardContent className={classes.content}>
         <PerfectScrollbar>
           <div className={classes.inner}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Código</TableCell>
-                  <TableCell>Descrição</TableCell>
-                  <TableCell>Categoria</TableCell>
-                  <TableCell>Status</TableCell>
-                  <TableCell />
-                  <TableCell />
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {tarefas.map((tarefa) => {
-                  return (
-                    <TableRow key={tarefa.id}>
-                      <TableCell>{tarefa.id}</TableCell>
-                      <TableCell>{tarefa.descricao}</TableCell>
-                      <TableCell>{tarefa.categoria}</TableCell>
-                      <TableCell>
-                        {tarefa.done ? 'Feito' : 'Pendente'}
-                      </TableCell>
-                      <TableCell>
-                        <IconButton
-                          onClick={() => props.alterarStatus(tarefa.id)}>
-                          {tarefa.done ? (
-                            <DoneAllIcon color="primary" />
-                          ) : (
-                            <TimerIcon color="secondary" />
-                          )}
-                        </IconButton>
-                      </TableCell>
-                      <TableCell>
-                        <IconButton
-                          onClick={(e) => props.deleteAction(tarefa.id)}>
-                          <DeleteIcon />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
+            <MaterialTable
+              title="Lista de Tarefas"
+              columns={[
+                { title: 'Descrição', field: 'descricao' },
+                { title: 'Andamento', field: 'done' },
+                { title: 'Categoria', field: 'categoria' }
+              ]}
+              data={tarefas}
+              actions={[
+                {
+                  icon: 'edit',
+                  tooltip: 'Editar',
+                  onClick: (event, rowData) => navigateToEdit(rowData.id)
+                },
+                (rowData) => ({
+                  icon: 'delete',
+                  tooltip: 'Remover',
+                  onClick: (event, rowData) => deleteAction(rowData.id)
+                })
+              ]}
+              options={{
+                filtering: true,
+                actionsColumnIndex: -1
+              }}
+              localization={{
+                header: {
+                  actions: ''
+                }
+              }}
+            />
           </div>
         </PerfectScrollbar>
       </CardContent>
@@ -99,7 +92,9 @@ const TarefasTable = (props) => {
 
 TarefasTable.propTypes = {
   className: PropTypes.string,
-  tarefas: PropTypes.array.isRequired
+  tarefas: PropTypes.array.isRequired,
+  navigateToEdit: PropTypes.func.isRequired,
+  deleteAction: PropTypes.func.isRequired
 };
 
 export default TarefasTable;

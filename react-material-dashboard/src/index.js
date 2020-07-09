@@ -6,8 +6,8 @@ import thunk from 'redux-thunk';
 import multi from 'redux-multi';
 
 import mainReducer from './store';
-import * as serviceWorker from './serviceWorker';
 import App from './App';
+import './i18n';
 
 const store = applyMiddleware(thunk, multi)(createStore)(mainReducer);
 
@@ -17,5 +17,3 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root')
 );
-
-serviceWorker.unregister();

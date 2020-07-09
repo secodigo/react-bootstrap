@@ -3,10 +3,8 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { Divider, Drawer } from '@material-ui/core';
-import DashboardIcon from '@material-ui/icons/Dashboard';
 
 import FormatListBulletedIcon from '@material-ui/icons/FormatListBulleted';
-import LockOpenIcon from '@material-ui/icons/LockOpen';
 import { Profile, SidebarNav } from './components';
 
 const useStyles = makeStyles((theme) => ({
@@ -39,19 +37,9 @@ const Sidebar = (props) => {
 
   const pages = [
     {
-      title: 'Dashboard',
-      href: '/dashboard',
-      icon: <DashboardIcon />
-    },
-    {
       title: 'Tarefas',
       href: '/tarefas',
       icon: <FormatListBulletedIcon />
-    },
-    {
-      title: 'Login',
-      href: '/login',
-      icon: <LockOpenIcon />
     }
   ];
 
@@ -65,7 +53,7 @@ const Sidebar = (props) => {
       <div {...rest} className={clsx(classes.root, className)}>
         <Profile />
         <Divider className={classes.divider} />
-        <SidebarNav className={classes.nav} pages={pages} />
+        <SidebarNav className={classes.nav} pages={pages} onClick={onClose} />
       </div>
     </Drawer>
   );

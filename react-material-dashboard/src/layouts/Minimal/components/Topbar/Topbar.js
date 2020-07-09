@@ -11,7 +11,7 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const Topbar = props => {
+const Topbar = (props) => {
   const { className, ...rest } = props;
 
   const classes = useStyles();
@@ -21,14 +21,10 @@ const Topbar = props => {
       {...rest}
       className={clsx(classes.root, className)}
       color="primary"
-      position="fixed"
-    >
+      position="fixed">
       <Toolbar>
         <RouterLink to="/">
-          <img
-            alt="Logo"
-            src="/images/logos/logo--white.svg"
-          />
+          <h1 style={{ color: 'white' }}>Neo Sistemas</h1>
         </RouterLink>
       </Toolbar>
     </AppBar>

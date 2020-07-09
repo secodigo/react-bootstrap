@@ -3,12 +3,14 @@ import { Link as RouterLink, withRouter } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
-import { AppBar, Toolbar, Badge, Hidden, IconButton } from '@material-ui/core';
+import { AppBar, Toolbar, Hidden, IconButton } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
-import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import InputIcon from '@material-ui/icons/Input';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { Api } from '../../../../api/ApiRest';
+import { removeToken } from '../../../../service/authenticate';
+import { Message } from '../../../../components';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,28 +25,33 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Topbar = (props) => {
-  const { className, onSidebarOpen, ...rest } = props;
+  const { className, history, onSidebarOpen, staticContext } = props;
+
+  const [message, setMessage] = useState({ msg: '' });
 
   const classes = useStyles();
 
-  const logout = () => {
-    localStorage.removeItem('email_usuario_logado');
-    props.history.push('/login');
+  const logout = async () => {
+    await Api.post('/api/v1/authentication/logout')
+      .then(() => {
+        removeToken();
+        history.push('/login');
+      })
+      .catch((err) => {
+        const msg = err.response || err.message;
+        setMessage({ msg });
+      });
   };
 
   return (
-    <AppBar {...rest} className={clsx(classes.root, className)}>
+    <AppBar className={clsx(classes.root, className)}>
+      {message.msg && <Message message={message} />}
       <Toolbar>
         <RouterLink to="/">
-          <img alt="Logo" src="/images/logos/logo--white.svg" />
+          <h1 style={{ color: 'white' }}>Neo Sistemas</h1>
         </RouterLink>
         <div className={classes.flexGrow} />
         <Hidden mdDown>
-          <IconButton color="inherit">
-            <Badge badgeContent={props.notifications} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
           <IconButton
             onClick={logout}
             className={classes.signOutButton}
@@ -62,9 +69,16 @@ const Topbar = (props) => {
   );
 };
 
+Topbar.defaultProps = {
+  className: ''
+};
+
 Topbar.propTypes = {
   className: PropTypes.string,
-  onSidebarOpen: PropTypes.func
+  onSidebarOpen: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired
+  }).isRequired
 };
 
 const mapStateToProps = (state) => ({

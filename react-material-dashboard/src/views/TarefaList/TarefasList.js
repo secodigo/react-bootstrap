@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -9,6 +9,7 @@ import {
   DialogTitle,
   Button
 } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
 
 import {
   listar,
@@ -19,7 +20,7 @@ import {
 
 import { esconderMensagem } from '../../store/mensagensReducer';
 
-import { TarefasToolbar, TarefasTable } from './components';
+import { TarefasTable } from './components';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,12 +38,28 @@ const TarefaList = (props) => {
     props.listar();
   }, []);
 
+  const history = useHistory();
+
+  const navigateTo = () =>
+    history.push({
+      pathname: '/tarefas/create'
+    });
+
+  const navigateToEdit = (id) =>
+    history.push({
+      pathname: `/tarefas/create/${id}`
+    });
+
   return (
     <div className={classes.root}>
-      <TarefasToolbar salvar={props.salvar} />
+      <div>
+        <Button onClick={navigateTo} variant="contained" color="secondary">
+          Adicionar
+        </Button>
+      </div>
       <div className={classes.content}>
         <TarefasTable
-          alterarStatus={props.alterarStatus}
+          navigateToEdit={navigateToEdit}
           deleteAction={props.deletar}
           tarefas={props.tarefas}
         />

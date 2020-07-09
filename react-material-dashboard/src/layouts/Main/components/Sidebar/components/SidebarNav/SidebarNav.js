@@ -56,6 +56,7 @@ const SidebarNav = (props) => {
       {pages.map((page) => (
         <ListItem className={classes.item} disableGutters key={page.title}>
           <Button
+            style={{ alignContent: 'center' }}
             activeClassName={classes.active}
             className={classes.button}
             component={CustomRouterLink}
