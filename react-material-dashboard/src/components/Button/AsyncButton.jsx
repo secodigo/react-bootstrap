@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, CircularProgress } from '@material-ui/core';
 import useStyles from './styles';
 
-const AsyncButton = (props) => {
+const AsyncButton = ({ text, disabled, onClick, ...attributes }) => {
   const [asyncState, setAsyncState] = useState(false);
 
   const isUnmounted = useRef(false);
@@ -20,12 +20,12 @@ const AsyncButton = (props) => {
     setAsyncState(null);
   };
 
-  const handleClick = (...args) => {
-    const clickHandler = props.onClick;
+  const handleClick = async (...args) => {
+    const clickHandler = onClick;
     if (typeof clickHandler === 'function') {
       setAsyncState(true);
 
-      const returnFn = clickHandler(...args);
+      const returnFn = await clickHandler(...args);
       if (returnFn && typeof returnFn.then === 'function') {
         returnFn
           .then(() => {
@@ -43,13 +43,12 @@ const AsyncButton = (props) => {
     }
   };
 
-  const { children, text, disabled, ...attributes } = props;
-
   const isDisabled = asyncState;
 
   return (
     <Button
       {...attributes}
+      data-testid="button"
       color="primary"
       fullWidth
       size="large"
@@ -58,7 +57,11 @@ const AsyncButton = (props) => {
       disabled={isDisabled || disabled}
       onClick={(event) => handleClick(event)}>
       {asyncState ? (
-        <CircularProgress size={24} className={classes.buttonProgress} />
+        <CircularProgress
+          data-testid="circularProgres"
+          size={24}
+          className={classes.buttonProgress}
+        />
       ) : (
         <>{text}</>
       )}
@@ -67,7 +70,6 @@ const AsyncButton = (props) => {
 };
 
 AsyncButton.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
   disabled: PropTypes.bool,
   text: PropTypes.string,
   onClick: PropTypes.func
