@@ -14,6 +14,13 @@ import { Message } from '../../../../components';
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    minHeight: 65,
+    [`${theme.breakpoints.up('xs')} and (orientation: landscape)`]: {
+      minHeight: 65
+    },
+    [theme.breakpoints.up('sm')]: {
+      minHeight: 64
+    },
     boxShadow: 'none'
   },
   flexGrow: {

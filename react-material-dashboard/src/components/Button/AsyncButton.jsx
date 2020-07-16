@@ -17,7 +17,7 @@ const AsyncButton = ({ text, disabled, onClick, ...attributes }) => {
   }, []);
 
   const resetState = () => {
-    setAsyncState(null);
+    setAsyncState(false);
   };
 
   const handleClick = async (...args) => {
@@ -25,10 +25,13 @@ const AsyncButton = ({ text, disabled, onClick, ...attributes }) => {
     if (typeof clickHandler === 'function') {
       setAsyncState(true);
 
-      const returnFn = await clickHandler(...args);
+      const returnFn = clickHandler(...args);
+      console.log(returnFn);
       if (returnFn && typeof returnFn.then === 'function') {
+        console.log('1')
         returnFn
           .then(() => {
+            console.log('2')
             if (isUnmounted.current) return;
             setAsyncState(false);
           })
@@ -49,9 +52,7 @@ const AsyncButton = ({ text, disabled, onClick, ...attributes }) => {
     <Button
       {...attributes}
       data-testid="button"
-      color="primary"
-      fullWidth
-      size="large"
+      color="secondary"
       variant="contained"
       className={classes.submit}
       disabled={isDisabled || disabled}

@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import { render, fireEvent, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import renderer from 'react-test-renderer';
 
 import AsyncButton from '../AsyncButton';
 

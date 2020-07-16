@@ -62,16 +62,15 @@ export function listar() {
 }
 
 export function salvar(tarefa) {
-  return (dispatch) => {
-    Api.post('tarefas', tarefa).then((response) => {
-      dispatch([
-        {
-          type: ACTIONS.ADD,
-          tarefa: response.data
-        },
-        mostrarMensagem('Tarefa salva com sucesso!')
-      ]);
-    });
+  return async (dispatch) => {
+    const response = await Api.post('tarefas', tarefa);
+    dispatch([
+      {
+        type: ACTIONS.ADD,
+        tarefa: response.data
+      },
+      mostrarMensagem('Tarefa salva com sucesso!')
+    ]);
   };
 }
 

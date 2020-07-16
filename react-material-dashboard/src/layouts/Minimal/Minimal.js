@@ -4,17 +4,20 @@ import { makeStyles } from '@material-ui/styles';
 
 import { Topbar } from './components';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    paddingTop: 64,
-    height: '100%'
+    paddingTop: 56,
+    height: '100%',
+    [theme.breakpoints.up('sm')]: {
+      paddingTop: 64
+    }
   },
   content: {
     height: '100%'
   }
 }));
 
-const Minimal = props => {
+const Minimal = (props) => {
   const { children } = props;
 
   const classes = useStyles();

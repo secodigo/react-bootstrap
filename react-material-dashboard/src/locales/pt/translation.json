@@ -1,4 +1,10 @@
 {
   "LOGIN_MSG_USER_PASS_INVALID": "Usuário ou senha inválidos",
-  "UNAUTHORIZED": "Usuário ou senha inválidos"
+  "UNAUTHORIZED": "Usuário ou senha inválidos",
+
+  "LOGIN": "Login",
+  "ENTRE_COM_DADOS": "Entre com os dados de Login",
+  "username": "Usuário",
+  "password": "Senha" ,
+  "ENTRAR": "ENTRAR"
 }
