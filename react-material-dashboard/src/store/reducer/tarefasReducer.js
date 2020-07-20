@@ -12,7 +12,7 @@ const Api = axios.create({
   headers: { 'x-tenant-id': localStorage.getItem('email_usuario_logado') }
 });
 
-const ACTIONS = {
+export const types = {
   LISTAR: 'TAREFAS_LISTAR',
   ADD: 'TAREFAS_ADD',
   REMOVER: 'TAREFAS_REMOVE',
@@ -21,22 +21,22 @@ const ACTIONS = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case ACTIONS.LISTAR:
+    case types.LISTAR:
       return {
         ...state,
         tarefas: action.tarefas,
         quantidade: action.tarefas.length
       };
-    case ACTIONS.ADD: {
+    case types.ADD: {
       const lista = [...state.tarefas, action.tarefa];
       return { ...state, tarefas: lista, quantidade: lista.length };
     }
-    case ACTIONS.REMOVER: {
+    case types.REMOVER: {
       const { id } = action;
       const tarefas = state.tarefas.filter((tarefa) => tarefa.id !== id);
       return { ...state, tarefas, quantidade: tarefas.length };
     }
-    case ACTIONS.UPDATE_STATUS: {
+    case types.UPDATE_STATUS: {
       const lista = [...state.tarefas];
       lista.forEach((tarefa) => {
         if (tarefa.id === action.id) {
@@ -54,7 +54,7 @@ export function listar() {
   return (dispatch) => {
     Api.get('tarefas').then((response) => {
       dispatch({
-        type: ACTIONS.LISTAR,
+        type: types.LISTAR,
         tarefas: response.data
       });
     });
@@ -66,7 +66,7 @@ export function salvar(tarefa) {
     const response = await Api.post('tarefas', tarefa);
     dispatch([
       {
-        type: ACTIONS.ADD,
+        type: types.ADD,
         tarefa: response.data
       },
       mostrarMensagem('Tarefa salva com sucesso!')
@@ -79,7 +79,7 @@ export function deletar(id) {
     Api.delete(`tarefas/${id}`).then(() => {
       dispatch([
         {
-          type: ACTIONS.REMOVER,
+          type: types.REMOVER,
           id
         },
         mostrarMensagem('Tarefa removida com sucesso!')
@@ -93,7 +93,7 @@ export function alterarStatus(id) {
     Api.patch(`tarefas/${id}`, null).then(() => {
       dispatch([
         {
-          type: ACTIONS.UPDATE_STATUS,
+          type: types.UPDATE_STATUS,
           id
         },
         mostrarMensagem('Tarefa atualizada com sucesso!')

@@ -4,10 +4,9 @@ import { useHistory } from 'react-router-dom';
 import { Typography, Container, Card, CardContent } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
+import { Message, AsyncButton, Input } from 'components';
 import useStyles from './styles';
-import { Message, AsyncButton, Input } from '../../components';
 import login from './SiginService';
-import { Form } from '../../layouts';
 
 const SignIn = () => {
   const { t } = useTranslation();

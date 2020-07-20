@@ -26,12 +26,9 @@ const AsyncButton = ({ text, disabled, onClick, ...attributes }) => {
       setAsyncState(true);
 
       const returnFn = clickHandler(...args);
-      console.log(returnFn);
       if (returnFn && typeof returnFn.then === 'function') {
-        console.log('1')
         returnFn
           .then(() => {
-            console.log('2')
             if (isUnmounted.current) return;
             setAsyncState(false);
           })

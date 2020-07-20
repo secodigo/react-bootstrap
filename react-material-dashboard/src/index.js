@@ -5,9 +5,9 @@ import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import multi from 'redux-multi';
 
-import mainReducer from './store';
-import App from './App';
-import './i18n';
+import mainReducer from 'store/reducer';
+import App from 'App';
+import 'i18n';
 
 const store = applyMiddleware(thunk, multi)(createStore)(mainReducer);
 

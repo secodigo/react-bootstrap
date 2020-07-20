@@ -2,48 +2,16 @@ import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { makeStyles } from '@material-ui/styles';
-import {
-  Card,
-  CardContent
-  // Table,
-  // TableBody,
-  // TableCell,
-  // TableHead,
-  // TableRow,
-  // IconButton
-} from '@material-ui/core';
-
-// import TimerIcon from '@material-ui/icons/Timer';
-// import DoneAllIcon from '@material-ui/icons/DoneAll';
-// import DeleteIcon from '@material-ui/icons/Delete';
+import { Card, CardContent } from '@material-ui/core';
 import MaterialTable from 'material-table';
+import useStyles from './styles';
 
-const useStyles = makeStyles((theme) => ({
-  root: {},
-  content: {
-    padding: 0
-  },
-  inner: {
-    minWidth: 1050
-  },
-  nameContainer: {
-    display: 'flex',
-    alignItems: 'center'
-  },
-  avatar: {
-    marginRight: theme.spacing(2)
-  },
-  actions: {
-    justifyContent: 'flex-end'
-  }
-}));
-
-const TarefasTable = ({
+const Table = ({
   className,
-  tarefas,
+  domains,
   navigateToEdit,
   deleteAction,
+  loading,
   ...rest
 }) => {
   const classes = useStyles();
@@ -54,20 +22,21 @@ const TarefasTable = ({
         <PerfectScrollbar>
           <div className={classes.inner}>
             <MaterialTable
+              isLoading={loading}
               title="Lista de Tarefas"
               columns={[
                 { title: 'Descrição', field: 'descricao' },
                 { title: 'Andamento', field: 'done' },
                 { title: 'Categoria', field: 'categoria' }
               ]}
-              data={tarefas}
+              data={domains}
               actions={[
                 {
                   icon: 'edit',
                   tooltip: 'Editar',
                   onClick: (event, rowData) => navigateToEdit(rowData.id)
                 },
-                (rowData) => ({
+                () => ({
                   icon: 'delete',
                   tooltip: 'Remover',
                   onClick: (event, rowData) => deleteAction(rowData.id)
@@ -80,6 +49,9 @@ const TarefasTable = ({
               localization={{
                 header: {
                   actions: ''
+                },
+                body: {
+                  emptyDataSourceMessage: 'Não há registros a serem exibidos!'
                 }
               }}
             />
@@ -90,11 +62,17 @@ const TarefasTable = ({
   );
 };
 
-TarefasTable.propTypes = {
+Table.defaultProps = {
+  className: '',
+  loading: false
+};
+
+Table.propTypes = {
   className: PropTypes.string,
-  tarefas: PropTypes.array.isRequired,
+  domains: PropTypes.oneOfType([PropTypes.array]).isRequired,
+  loading: PropTypes.bool,
   navigateToEdit: PropTypes.func.isRequired,
   deleteAction: PropTypes.func.isRequired
 };
 
-export default TarefasTable;
+export default Table;

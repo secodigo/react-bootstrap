@@ -6,8 +6,6 @@ import { makeStyles } from '@material-ui/styles';
 import { AppBar, Toolbar, Hidden, IconButton } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import InputIcon from '@material-ui/icons/Input';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
 import { Api } from '../../../../api/ApiRest';
 import { removeToken } from '../../../../service/authenticate';
 import { Message } from '../../../../components';
@@ -88,8 +86,4 @@ Topbar.propTypes = {
   }).isRequired
 };
 
-const mapStateToProps = (state) => ({
-  notifications: state.tarefas.quantidade
-});
-
-export default compose(connect(mapStateToProps), withRouter)(Topbar);
+export default withRouter(Topbar);

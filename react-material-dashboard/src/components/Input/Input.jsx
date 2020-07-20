@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { TextField } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import { useField } from 'formik';
@@ -11,16 +11,17 @@ const Input = (props) => {
   const classes = useStyles();
 
   const [field, meta, helpers] = useField(name);
-
+  
   return (
     <TextField
+      {...field}
+      {...props}
       className={classes.textField}
       fullWidth
       label={t(name)}
       name={name}
       variant={typefield}
-      {...field}
-      {...props}
+      value={field.value || ''}
     />
   );
 };

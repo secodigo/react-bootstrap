@@ -5,7 +5,7 @@ import { RouteWithLayout } from './components';
 import { Main as MainLayout, Minimal as MinimalLayout } from './layouts';
 
 import {
-  TarefaList as TarefaListView,
+  TarefasList as TarefaListView,
   SignIn as SignInView,
   NotFound as NotFoundView,
   Home as HomeView

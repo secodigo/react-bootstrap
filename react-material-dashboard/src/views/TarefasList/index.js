@@ -1,8 +1,8 @@
 // export { default } from './TarefasList';
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import TarefasList from './TarefasList';
 import { TarefasToolbar } from './components';
+import TarefasList from './TarefasList';
 
 function index({ match }) {
   return (
