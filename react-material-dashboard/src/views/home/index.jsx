@@ -1,4 +1,3 @@
-// export { default } from './TarefasList';
 import React from 'react';
 
 function index() {

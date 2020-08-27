@@ -5,7 +5,7 @@ import { RouteWithLayout } from './components';
 import { Main as MainLayout, Minimal as MinimalLayout } from './layouts';
 
 import {
-  TarefasList as TarefaListView,
+  GrupoComercial as GrupoComercialView,
   SignIn as SignInView,
   NotFound as NotFoundView,
   Home as HomeView
@@ -16,17 +16,11 @@ const Routes = () => {
     <Switch>
       <Redirect exact from="/" to="/login" />
       <RouteWithLayout
-        component={TarefaListView}
-        // exact
+        component={GrupoComercialView}
         layout={MainLayout}
-        path="/tarefas"
+        path="/grupocomercial"
       />
-      <RouteWithLayout
-        component={HomeView}
-        // exact
-        layout={MainLayout}
-        path="/home"
-      />
+      <RouteWithLayout component={HomeView} layout={MainLayout} path="/home" />
       <RouteWithLayout
         component={SignInView}
         exact

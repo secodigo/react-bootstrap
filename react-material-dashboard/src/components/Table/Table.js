@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import PerfectScrollbar from 'react-perfect-scrollbar';
-import { Card, CardContent } from '@material-ui/core';
+import { Card, CardContent, Typography } from '@material-ui/core';
 import MaterialTable from 'material-table';
 import useStyles from './styles';
 
@@ -12,10 +12,10 @@ const Table = ({
   navigateToEdit,
   deleteAction,
   loading,
+  title,
   ...rest
 }) => {
   const classes = useStyles();
-
   return (
     <Card {...rest} className={clsx(classes.root, className)}>
       <CardContent className={classes.content}>
@@ -23,11 +23,14 @@ const Table = ({
           <div className={classes.inner}>
             <MaterialTable
               isLoading={loading}
-              title="Lista de Tarefas"
+              title={
+                <Typography component="h1" variant="h4">
+                  {title}
+                </Typography>
+              }
               columns={[
-                { title: 'Descrição', field: 'descricao' },
-                { title: 'Andamento', field: 'done' },
-                { title: 'Categoria', field: 'categoria' }
+                { title: 'Código', field: 'codigo' },
+                { title: 'Descrição', field: 'descricao' }
               ]}
               data={domains}
               actions={[
@@ -44,7 +47,8 @@ const Table = ({
               ]}
               options={{
                 filtering: true,
-                actionsColumnIndex: -1
+                actionsColumnIndex: -1,
+                paginationType: 'stepped'
               }}
               localization={{
                 header: {
@@ -69,6 +73,7 @@ Table.defaultProps = {
 
 Table.propTypes = {
   className: PropTypes.string,
+  title: PropTypes.string.isRequired,
   domains: PropTypes.oneOfType([PropTypes.array]).isRequired,
   loading: PropTypes.bool,
   navigateToEdit: PropTypes.func.isRequired,

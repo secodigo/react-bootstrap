@@ -37,8 +37,8 @@ const Sidebar = (props) => {
 
   const pages = [
     {
-      title: 'Tarefas',
-      href: '/tarefas',
+      title: 'Grupo Comercial',
+      href: '/grupocomercial',
       icon: <FormatListBulletedIcon />
     }
   ];

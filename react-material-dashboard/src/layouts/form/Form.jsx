@@ -1,8 +1,14 @@
 import React, { useEffect } from 'react';
 import { Formik } from 'formik';
-import { AppBar, Toolbar, Card, CardContent } from '@material-ui/core';
+import {
+  AppBar,
+  Toolbar,
+  Card,
+  CardContent,
+  Typography
+} from '@material-ui/core';
 import clsx from 'clsx';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
@@ -10,12 +16,13 @@ import { AsyncButton } from 'components';
 import actions from 'store/actions/defaultActions';
 import useStyles from './styles';
 
-const Form = ({ children, reducer }) => {
+const Form = ({ children, reducer, endPoint, title }) => {
   const classes = useStyles();
   const { domains, domain } = useSelector((state) => state[reducer]);
   const { id } = useParams();
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const { goBack } = useHistory();
 
   useEffect(() => {
     if (id) {
@@ -24,6 +31,9 @@ const Form = ({ children, reducer }) => {
         dispatch(actions.fetchById(reducer, resultado[0]));
       }
     }
+    return () => {
+      dispatch(actions.clear(reducer));
+    };
   }, []);
 
   return (
@@ -32,8 +42,11 @@ const Form = ({ children, reducer }) => {
         {({ values, resetForm }) => {
           const handleSubmit = async (event) => {
             event.preventDefault();
-            return dispatch(actions.save(reducer, 'tarefas', values)).then(() =>
-              resetForm()
+            return dispatch(actions.save(reducer, endPoint, values)).then(
+              () => {
+                resetForm();
+                goBack();
+              }
             );
           };
 
@@ -46,11 +59,19 @@ const Form = ({ children, reducer }) => {
                     text={t('SAVE')}
                     onClick={handleSubmit}
                   />
+                  <AsyncButton
+                    style={{ marginLeft: 10 }}
+                    text={t('CANCELAR')}
+                    onClick={() => goBack()}
+                  />
                 </Toolbar>
               </AppBar>
               <form className={classes.form}>
                 <Card>
                   <CardContent className={classes.content}>
+                    <Typography component="h1" variant="h4">
+                      {t(title)}
+                    </Typography>
                     {children === 'function' ? children(values) : children}
                   </CardContent>
                 </Card>
@@ -69,7 +90,9 @@ Form.propTypes = {
     PropTypes.node,
     PropTypes.func
   ]).isRequired,
-  reducer: PropTypes.string.isRequired
+  reducer: PropTypes.string.isRequired,
+  endPoint: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired
 };
 
 export default Form;

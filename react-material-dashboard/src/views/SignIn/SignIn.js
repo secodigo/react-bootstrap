@@ -25,7 +25,7 @@ const SignIn = () => {
               username: 'NEOADMIN',
               password: '0904$%NEO'
             }}>
-            {(values) => {
+            {({ values }) => {
               const handleSignIn = async (event) => {
                 event.preventDefault();
                 return login(values.username, values.password)

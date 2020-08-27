@@ -2,18 +2,20 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { Table } from 'components';
 import defaultActions from 'store/actions/defaultActions';
 import useStyles from './styles';
 
-const List = ({ reducer }) => {
+const List = ({ reducer, endPoint, title }) => {
   const classes = useStyles();
   const { domains, loading } = useSelector((state) => state[reducer]);
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   useEffect(() => {
-    dispatch(defaultActions.list(reducer, 'tarefas'));
+    dispatch(defaultActions.list(reducer, endPoint));
   }, []);
 
   const history = useHistory();
@@ -29,13 +31,13 @@ const List = ({ reducer }) => {
     });
 
   const removeAction = (id) =>
-    dispatch(defaultActions.remove(reducer, 'tarefas', id));
+    dispatch(defaultActions.remove(reducer, endPoint, id));
 
   return (
     <div className={classes.root}>
       <div>
         <Button onClick={navigateTo} variant="contained" color="secondary">
-          Adicionar
+          {t('ADD')}
         </Button>
       </div>
       <div className={classes.content}>
@@ -44,6 +46,7 @@ const List = ({ reducer }) => {
           deleteAction={removeAction}
           domains={domains}
           loading={loading}
+          title={title}
         />
       </div>
       {/* <Dialog open={props.openDialog} onClose={props.esconderMensagem}>
@@ -58,7 +61,13 @@ const List = ({ reducer }) => {
 };
 
 List.propTypes = {
-  reducer: PropTypes.string.isRequired
+  endPoint: PropTypes.shape({
+    search: PropTypes.string.isRequired,
+    crud: PropTypes.string.isRequired,
+    entity: PropTypes.string.isRequired
+  }).isRequired,
+  reducer: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired
 };
 
 export default List;

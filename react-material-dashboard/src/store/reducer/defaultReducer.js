@@ -1,4 +1,5 @@
 const initialState = {
+  header: {},
   domains: [],
   domain: {},
   loading: false
@@ -9,29 +10,33 @@ export const types = {
   ADD: 'ADD',
   REMOVE: 'REMOVE',
   FETCH: 'FETCH',
-  LOADING: 'LOADING'
+  LOADING: 'LOADING',
+  CLEAR: 'CLEAR'
 };
 
-function createCrudReducerWithNamedType(counterName = '') {
+function createCrudReducerWithNamedType(reducerName = '') {
   return function counter(state = initialState, action) {
     switch (action.type) {
-      case `${types.LOADING}_${counterName}`: {
+      case `${types.LOADING}_${reducerName}`: {
         return { ...state, loading: action.loading };
       }
-      case `${types.LIST}_${counterName}`: {
+      case `${types.LIST}_${reducerName}`: {
         return {
           ...state,
           domains: action.domains
         };
       }
-      case `${types.ADD}_${counterName}`: {
+      case `${types.ADD}_${reducerName}`: {
         const lista = [...state.domains, action.domain];
         return { ...state, domains: lista, domain: {} };
       }
-      case `${types.FETCH}_${counterName}`: {
+      case `${types.FETCH}_${reducerName}`: {
         return { ...state, domain: action.domain };
       }
-      case `${types.REMOVE}_${counterName}`: {
+      case `${types.CLEAR}_${reducerName}`: {
+        return { ...state, domain: initialState.domain };
+      }
+      case `${types.REMOVE}_${reducerName}`: {
         const { id } = action;
         const domains = state.domains.filter((domain) => domain.id !== id);
         return { ...state, domains };

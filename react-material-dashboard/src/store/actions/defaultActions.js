@@ -1,10 +1,6 @@
-import Axios from 'axios';
-import { mostrarMensagem } from 'store/reducer/mensagensReducer';
-
-const Api = Axios.create({
-  baseURL: 'https://minhastarefas-api.herokuapp.com',
-  headers: { 'x-tenant-id': localStorage.getItem('email_usuario_logado') }
-});
+import { mostrarMensagem, ACTIONS } from 'store/reducer/mensagensReducer';
+import { Api, fetchByFilter, remove } from 'api/ApiRest';
+import axios from 'axios';
 
 const LoadingAction = {
   start: (reducer) => {
@@ -23,12 +19,21 @@ const LoadingAction = {
 const defaultActions = {
   list: (reducer, endPoint) => async (dispatch) => {
     dispatch(LoadingAction.start(reducer));
-    await Api.get(endPoint).then((response) => {
-      dispatch({
-        type: `LIST_${reducer}`,
-        domains: response.data
-      });
-    });
+    await axios
+      .all([
+        fetchByFilter(`/api/v1/common/search/filter/${endPoint.entity}`),
+        fetchByFilter(endPoint.search + endPoint.entity)
+      ])
+      .then(
+        axios.spread((...responses) => {
+          console.log(responses[0].data.filter);
+          dispatch({
+            type: `LIST_${reducer}`,
+            domains: responses[1].data[endPoint.entity],
+            header: responses[0].data.filter
+          });
+        })
+      );
     dispatch(LoadingAction.pause(reducer));
   },
 
@@ -39,6 +44,12 @@ const defaultActions = {
       domain: value
     });
     dispatch(LoadingAction.pause(reducer));
+  },
+
+  clear: (reducer) => (dispatch) => {
+    dispatch({
+      type: `CLEAR_${reducer}`
+    });
   },
 
   save: (reducer, endPoint, domain) => async (dispatch) => {
@@ -56,7 +67,7 @@ const defaultActions = {
 
   remove: (reducer, endPoint, id) => async (dispatch) => {
     dispatch(LoadingAction.start(reducer));
-    await Api.delete(`${endPoint}/${id}`).then(() => {
+    await remove(`${endPoint.crud + endPoint.entity}`, id).then(() => {
       dispatch([
         {
           type: `REMOVE_${reducer}`,
