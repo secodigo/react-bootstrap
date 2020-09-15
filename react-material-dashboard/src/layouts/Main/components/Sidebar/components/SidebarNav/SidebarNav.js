@@ -17,11 +17,12 @@ const useStyles = makeStyles((theme) => ({
   button: {
     color: colors.blueGrey[800],
     padding: '10px 8px',
+    marginLeft: -5,
     justifyContent: 'flex-start',
     textTransform: 'none',
     letterSpacing: 0,
     width: '100%',
-    fontWeight: theme.typography.fontWeightMedium
+    fontWeight: theme.typography.fontWeightMedium,
   },
   icon: {
     color: theme.palette.icon,
@@ -29,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     height: 24,
     display: 'flex',
     alignItems: 'center',
-    marginRight: theme.spacing(1)
+    marginRight: theme.spacing(2)
   },
   active: {
     color: theme.palette.primary.main,

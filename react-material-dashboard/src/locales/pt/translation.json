@@ -11,5 +11,17 @@
   "ENTRAR": "ENTRAR",
 
   "GRUPO_COMERCIAL": "Grupo Comercial",
-  "descricao": "Descrição"
+  "descricao": "Descrição",
+
+  "USUARIO": "Usuário",
+  "name": "Nome",
+  "fullName": "Nome Completo",
+  "email": "Email",
+  "activeS": "Ativo",
+  "activeN": "Inativo",
+  "enableForgottenPasswordS": "Habilitado (Esqueceu sua senha)",
+  "enableForgottenPasswordN": "Habilitar (Esqueceu sua senha)",
+  "tempoSessao": "Tempo Sessão (em minutos)",
+  "quantidadeDiasSemAcessoInativado": "Quantidade de dias sem acesso para ser inativado",
+  "passwordExpirationDate": "Validade senha"
 }

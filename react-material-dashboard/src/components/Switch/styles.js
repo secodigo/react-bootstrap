@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles((theme) => ({
-  textField: {
+  switch: {
     marginTop: theme.spacing(2)
   }
 }));

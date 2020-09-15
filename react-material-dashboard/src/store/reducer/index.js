@@ -4,6 +4,8 @@ import createCrudReducerWithNamedType from './defaultReducer';
 
 const mainReducer = combineReducers({
   grupocomercial: createCrudReducerWithNamedType('grupocomercial'),
+  group: createCrudReducerWithNamedType('group'),
+  usuario: createCrudReducerWithNamedType('usuario'),
   mensagens: mensagensReducer
 });
 

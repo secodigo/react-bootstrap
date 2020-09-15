@@ -6,6 +6,7 @@ import { Main as MainLayout, Minimal as MinimalLayout } from './layouts';
 
 import {
   GrupoComercial as GrupoComercialView,
+  Usuario as UsuarioView,
   SignIn as SignInView,
   NotFound as NotFoundView,
   Home as HomeView
@@ -19,6 +20,11 @@ const Routes = () => {
         component={GrupoComercialView}
         layout={MainLayout}
         path="/grupocomercial"
+      />
+      <RouteWithLayout
+        component={UsuarioView}
+        layout={MainLayout}
+        path="/usuario"
       />
       <RouteWithLayout component={HomeView} layout={MainLayout} path="/home" />
       <RouteWithLayout

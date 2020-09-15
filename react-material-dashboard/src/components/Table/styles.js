@@ -1,12 +1,16 @@
 import { makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles((theme) => ({
-  root: {},
+  root: {
+    [theme.breakpoints.only('xs')]: {
+      height: '100%'
+    }
+  },
   content: {
     padding: 0
   },
   inner: {
-    minWidth: 1050
+    padding: 5
   },
   nameContainer: {
     display: 'flex',
@@ -17,6 +21,9 @@ const useStyles = makeStyles((theme) => ({
   },
   actions: {
     justifyContent: 'flex-end'
+  },
+  toolbar: {
+    padding: 20
   }
 }));
 

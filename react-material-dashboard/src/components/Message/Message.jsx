@@ -27,7 +27,7 @@ const Message = ({ message, duration }) => {
           onClose={() => {
             setOpen(false);
           }}>
-          {message.msg}
+          {message.msg || message}
         </Alert>
       </Snackbar>
     </div>

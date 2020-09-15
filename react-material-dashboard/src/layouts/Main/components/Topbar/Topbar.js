@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState } from 'react';
 import { Link as RouterLink, withRouter } from 'react-router-dom';
 import clsx from 'clsx';
@@ -12,12 +13,12 @@ import { Message } from '../../../../components';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    minHeight: 65,
+    minHeight: 45,
     [`${theme.breakpoints.up('xs')} and (orientation: landscape)`]: {
-      minHeight: 65
+      minHeight: 45
     },
     [theme.breakpoints.up('sm')]: {
-      minHeight: 64
+      minHeight: 44
     },
     boxShadow: 'none'
   },
@@ -30,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Topbar = (props) => {
+  // eslint-disable-next-line no-unused-vars
   const { className, history, onSidebarOpen, staticContext } = props;
 
   const [message, setMessage] = useState({ msg: '' });
@@ -51,7 +53,7 @@ const Topbar = (props) => {
   return (
     <AppBar className={clsx(classes.root, className)}>
       {message.msg && <Message message={message} />}
-      <Toolbar>
+      <Toolbar className={clsx(classes.root, className)}>
         <RouterLink to="/">
           <h1 style={{ color: 'white' }}>Neo Sistemas</h1>
         </RouterLink>

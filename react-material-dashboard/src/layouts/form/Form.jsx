@@ -1,12 +1,6 @@
 import React, { useEffect } from 'react';
 import { Formik } from 'formik';
-import {
-  AppBar,
-  Toolbar,
-  Card,
-  CardContent,
-  Typography
-} from '@material-ui/core';
+import { Card, CardContent, Typography } from '@material-ui/core';
 import clsx from 'clsx';
 import { useParams, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -14,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { AsyncButton } from 'components';
 import actions from 'store/actions/defaultActions';
+import { ToolBar } from 'layouts';
 import useStyles from './styles';
 
 const Form = ({ children, reducer, endPoint, title }) => {
@@ -52,8 +47,8 @@ const Form = ({ children, reducer, endPoint, title }) => {
 
           return (
             <>
-              <AppBar position="sticky" className={classes.div}>
-                <Toolbar style={{ justifyContent: 'flex-start' }}>
+              <form className={classes.form}>
+                <ToolBar>
                   <AsyncButton
                     type="submit"
                     text={t('SAVE')}
@@ -64,9 +59,8 @@ const Form = ({ children, reducer, endPoint, title }) => {
                     text={t('CANCELAR')}
                     onClick={() => goBack()}
                   />
-                </Toolbar>
-              </AppBar>
-              <form className={classes.form}>
+                </ToolBar>
+
                 <Card>
                   <CardContent className={classes.content}>
                     <Typography component="h1" variant="h4">

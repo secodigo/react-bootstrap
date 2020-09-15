@@ -1,4 +1,4 @@
-import { mostrarMensagem, ACTIONS } from 'store/reducer/mensagensReducer';
+import { mostrarMensagem } from 'store/reducer/mensagensReducer';
 import { Api, fetchByFilter, remove } from 'api/ApiRest';
 import axios from 'axios';
 
@@ -17,16 +17,26 @@ const LoadingAction = {
   }
 };
 const defaultActions = {
-  list: (reducer, endPoint) => async (dispatch) => {
+  filters: (reducer, endPoint) => async (dispatch) => {
+    await fetchByFilter(`/api/v1/common/search/filter/${endPoint.entity}`).then(
+      (response) => {
+        dispatch({
+          type: `FILTERS_${reducer}`,
+          filters: response.data.filter
+        });
+      }
+    );
+  },
+
+  list: (reducer, endPoint, filter) => async (dispatch) => {
     dispatch(LoadingAction.start(reducer));
     await axios
       .all([
         fetchByFilter(`/api/v1/common/search/filter/${endPoint.entity}`),
-        fetchByFilter(endPoint.search + endPoint.entity)
+        fetchByFilter(endPoint.search + endPoint.entity, filter)
       ])
       .then(
         axios.spread((...responses) => {
-          console.log(responses[0].data.filter);
           dispatch({
             type: `LIST_${reducer}`,
             domains: responses[1].data[endPoint.entity],
@@ -49,6 +59,12 @@ const defaultActions = {
   clear: (reducer) => (dispatch) => {
     dispatch({
       type: `CLEAR_${reducer}`
+    });
+  },
+
+  clearMessage: (reducer) => (dispatch) => {
+    dispatch({
+      type: `CLEARMESSAGE_${reducer}`
     });
   },
 

@@ -8,14 +8,14 @@ import { Sidebar, Topbar } from './components';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    paddingTop: 56,
+    paddingTop: 36,
     height: '100%',
     [theme.breakpoints.up('sm')]: {
-      paddingTop: 64
+      paddingTop: 44
     }
   },
   shiftContent: {
-    paddingLeft: 240
+    paddingLeft: 50
   }
 }));
 
@@ -38,8 +38,6 @@ const Main = (props) => {
     setOpenSidebar(false);
   };
 
-  const shouldOpenSidebar = isDesktop ? true : openSidebar;
-
   return (
     <div
       className={clsx({
@@ -49,8 +47,8 @@ const Main = (props) => {
       <Topbar onSidebarOpen={handleSidebarOpen} />
       <Sidebar
         onClose={handleSidebarClose}
-        open={shouldOpenSidebar}
-        variant={isDesktop ? 'persistent' : 'temporary'}
+        open={openSidebar}
+        variant={isDesktop ? 'permanent' : 'temporary'}
       />
       <main>{children}</main>
     </div>

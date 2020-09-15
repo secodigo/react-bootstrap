@@ -9,7 +9,8 @@ const GrupoComercial = () => {
       endPoint={{
         search: '/api/v1/common/search/',
         crud: '/api/v1/common/',
-        entity: 'grupocomercial'
+        entity: 'grupocomercial',
+        filterDefault: 'descgrc'
       }}
     />
   );
