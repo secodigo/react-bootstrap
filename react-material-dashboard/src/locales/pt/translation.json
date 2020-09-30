@@ -3,6 +3,8 @@
   "UNAUTHORIZED": "Usuário ou senha inválidos",
   "SAVE": "Salvar",
   "ADD": "Adicionar",
+  "FIELD_OBRIGATORIO": "Campo obrigatório",
+  "PASSWORD_NOT_MATCH": "Senha não confere",
 
   "LOGIN": "Login",
   "ENTRE_COM_DADOS": "Entre com os dados de Login",
@@ -23,5 +25,7 @@
   "enableForgottenPasswordN": "Habilitar (Esqueceu sua senha)",
   "tempoSessao": "Tempo Sessão (em minutos)",
   "quantidadeDiasSemAcessoInativado": "Quantidade de dias sem acesso para ser inativado",
-  "passwordExpirationDate": "Validade senha"
+  "passwordExpirationDate": "Validade senha",
+  "newPassword": "Senha",
+  "confirmPassword": "Confirma Senha"
 }

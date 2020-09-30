@@ -7,33 +7,39 @@ import clsx from 'clsx';
 import useStyles from './styles';
 
 const Input = (props) => {
-  const { name, typefield } = props;
+  const { name, typefield, className } = props;
   const { t } = useTranslation();
   const classes = useStyles();
 
-  const [field] = useField(name);
+  const [field, meta] = useField(name);
 
   return (
-    <TextField
-      {...field}
-      {...props}
-      className={clsx(classes.textField, props.className)}
-      fullWidth
-      label={t(name)}
-      name={name}
-      variant={typefield}
-      value={field.value || ''}
-    />
+    <>
+      <TextField
+        {...field}
+        {...props}
+        className={clsx(classes.textField, className)}
+        fullWidth
+        label={t(name)}
+        name={name}
+        variant={typefield}
+        value={field.value || ''}
+        error={!!meta.error}
+        helperText={meta.error}
+      />
+    </>
   );
 };
 
 Input.defaultProps = {
-  typefield: 'standard'
+  typefield: 'standard',
+  className: ''
 };
 
 Input.propTypes = {
   name: PropTypes.string.isRequired,
-  typefield: PropTypes.string
+  typefield: PropTypes.string,
+  className: PropTypes.string
 };
 
 export default Input;

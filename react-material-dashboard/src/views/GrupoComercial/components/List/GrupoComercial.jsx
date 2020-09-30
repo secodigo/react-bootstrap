@@ -10,7 +10,7 @@ const GrupoComercial = () => {
         search: '/api/v1/common/search/',
         crud: '/api/v1/common/',
         entity: 'grupocomercial',
-        filterDefault: 'descgrc'
+        filterDefault: 'descricao'
       }}
     />
   );

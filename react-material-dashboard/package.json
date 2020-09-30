@@ -56,7 +56,9 @@
     "redux": "^4.0.5",
     "redux-multi": "^0.1.12",
     "redux-thunk": "^2.3.0",
-    "underscore": "^1.10.2"
+    "underscore": "^1.10.2",
+    "use-debounce": "^4.0.0",
+    "yup": "^0.29.3"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.0",

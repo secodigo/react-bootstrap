@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import { Button, CircularProgress } from '@material-ui/core';
 import useStyles from './styles';
 
-const AsyncButton = ({ text, disabled, onClick, ...attributes }) => {
+const AsyncButton = ({ text, disabled, onClick, async = false, ...attributes }) => {
   const [asyncState, setAsyncState] = useState(false);
-
   const isUnmounted = useRef(false);
 
   const classes = useStyles();
@@ -43,7 +42,7 @@ const AsyncButton = ({ text, disabled, onClick, ...attributes }) => {
     }
   };
 
-  const isDisabled = asyncState;
+  const isDisabled = asyncState || async;
 
   return (
     <Button
@@ -54,7 +53,7 @@ const AsyncButton = ({ text, disabled, onClick, ...attributes }) => {
       className={classes.submit}
       disabled={isDisabled || disabled}
       onClick={(event) => handleClick(event)}>
-      {asyncState ? (
+      {async || asyncState ? (
         <CircularProgress
           data-testid="circularProgres"
           size={24}

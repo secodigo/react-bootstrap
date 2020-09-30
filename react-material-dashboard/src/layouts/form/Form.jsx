@@ -2,56 +2,64 @@ import React, { useEffect } from 'react';
 import { Formik } from 'formik';
 import { Card, CardContent, Typography } from '@material-ui/core';
 import clsx from 'clsx';
-import { useParams, useHistory } from 'react-router-dom';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { AsyncButton } from 'components';
-import actions from 'store/actions/defaultActions';
+import defaultAction from 'store/actions/defaultActions';
 import { ToolBar } from 'layouts';
 import useStyles from './styles';
 
-const Form = ({ children, reducer, endPoint, title }) => {
+const Form = ({ children, reducer, endPoint, title, action, schema }) => {
   const classes = useStyles();
-  const { domains, domain } = useSelector((state) => state[reducer]);
-  const { id } = useParams();
+  const { domain } = useSelector((state) => state[reducer]);
+  const match = useRouteMatch();
+  const { id } = match.params;
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const { goBack } = useHistory();
 
   useEffect(() => {
     if (id) {
-      const resultado = domains.filter((value) => value.id === parseInt(id));
-      if (resultado.length >= 1) {
-        dispatch(actions.fetchById(reducer, resultado[0]));
-      }
+      dispatch(
+        (action?.fetchById || defaultAction.fetchById)(reducer, endPoint, id)
+      );
     }
     return () => {
-      dispatch(actions.clear(reducer));
+      dispatch((action?.clear || defaultAction.clear)(reducer));
     };
   }, []);
 
+  const submit = async (values, resetForm) => {
+    return dispatch(
+      (action?.save || defaultAction.save)(reducer, endPoint, values)
+    ).then(() => {
+      resetForm();
+      goBack();
+    });
+  };
+
   return (
     <div className={clsx(classes.root)}>
-      <Formik initialValues={domain} enableReinitialize>
-        {({ values, resetForm }) => {
-          const handleSubmit = async (event) => {
-            event.preventDefault();
-            return dispatch(actions.save(reducer, endPoint, values)).then(
-              () => {
-                resetForm();
-                goBack();
-              }
-            );
-          };
-
+      <Formik
+        initialValues={domain}
+        validationSchema={schema}
+        enableReinitialize
+        onSubmit={(values, { setSubmitting, resetForm }) => {
+          submit(values, resetForm, setSubmitting);
+        }}>
+        {({ values, handleSubmit, isValidating, isSubmitting }) => {
           return (
             <>
-              <form className={classes.form}>
+              <form
+                className={classes.form}
+                onSubmit={(e) => e.preventDefault()}>
                 <ToolBar>
                   <AsyncButton
                     type="submit"
                     text={t('SAVE')}
+                    async={isValidating || isSubmitting}
                     onClick={handleSubmit}
                   />
                   <AsyncButton
@@ -85,8 +93,10 @@ Form.propTypes = {
     PropTypes.func
   ]).isRequired,
   reducer: PropTypes.string.isRequired,
-  endPoint: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired
+  endPoint: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  title: PropTypes.string.isRequired,
+  action: PropTypes.oneOfType([PropTypes.object]).isRequired,
+  schema: PropTypes.oneOfType([PropTypes.object]).isRequired
 };
 
 export default Form;

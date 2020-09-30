@@ -1,21 +1,7 @@
 import { mostrarMensagem } from 'store/reducer/mensagensReducer';
-import { Api, fetchByFilter, remove } from 'api/ApiRest';
-import axios from 'axios';
+import { Api, fetchByFilter, remove, fetchById } from 'api/ApiRest';
+import loadingAction from './loadingActions';
 
-const LoadingAction = {
-  start: (reducer) => {
-    return {
-      type: `LOADING_${reducer}`,
-      loading: true
-    };
-  },
-  pause: (reducer) => {
-    return {
-      type: `LOADING_${reducer}`,
-      loading: false
-    };
-  }
-};
 const defaultActions = {
   filters: (reducer, endPoint) => async (dispatch) => {
     await fetchByFilter(`/api/v1/common/search/filter/${endPoint.entity}`).then(
@@ -29,31 +15,27 @@ const defaultActions = {
   },
 
   list: (reducer, endPoint, filter) => async (dispatch) => {
-    dispatch(LoadingAction.start(reducer));
-    await axios
-      .all([
-        fetchByFilter(`/api/v1/common/search/filter/${endPoint.entity}`),
-        fetchByFilter(endPoint.search + endPoint.entity, filter)
-      ])
-      .then(
-        axios.spread((...responses) => {
-          dispatch({
-            type: `LIST_${reducer}`,
-            domains: responses[1].data[endPoint.entity],
-            header: responses[0].data.filter
-          });
-        })
-      );
-    dispatch(LoadingAction.pause(reducer));
+    dispatch(loadingAction.start(reducer));
+    await fetchByFilter(endPoint.search + endPoint.entity, filter).then(
+      (responses) => {
+        dispatch({
+          type: `LIST_${reducer}`,
+          domains: responses.data[endPoint.entity]
+        });
+      }
+    );
+    dispatch(loadingAction.pause(reducer));
   },
 
-  fetchById: (reducer, value) => (dispatch) => {
-    dispatch(LoadingAction.start(reducer));
-    dispatch({
-      type: `FETCH_${reducer}`,
-      domain: value
+  fetchById: (reducer, endPoint, id) => (dispatch) => {
+    dispatch(loadingAction.start(reducer));
+    fetchById(endPoint.search + endPoint.entity, id).then((response) => {
+      dispatch({
+        type: `FETCH_${reducer}`,
+        domain: response.data[endPoint.entity][0]
+      });
     });
-    dispatch(LoadingAction.pause(reducer));
+    dispatch(loadingAction.pause(reducer));
   },
 
   clear: (reducer) => (dispatch) => {
@@ -69,8 +51,8 @@ const defaultActions = {
   },
 
   save: (reducer, endPoint, domain) => async (dispatch) => {
-    dispatch(LoadingAction.start(reducer));
-    const response = await Api.post(endPoint, domain);
+    dispatch(loadingAction.start(reducer));
+    const response = await Api.post(endPoint.crud + endPoint.entity, domain);
     dispatch([
       {
         type: `ADD_${reducer}`,
@@ -78,11 +60,11 @@ const defaultActions = {
       },
       mostrarMensagem('Salvo com sucesso!')
     ]);
-    dispatch(LoadingAction.pause(reducer));
+    dispatch(loadingAction.pause(reducer));
   },
 
   remove: (reducer, endPoint, id) => async (dispatch) => {
-    dispatch(LoadingAction.start(reducer));
+    dispatch(loadingAction.start(reducer));
     await remove(`${endPoint.crud + endPoint.entity}`, id).then(() => {
       dispatch([
         {
@@ -92,7 +74,7 @@ const defaultActions = {
         mostrarMensagem('Removido com sucesso!')
       ]);
     });
-    dispatch(LoadingAction.pause(reducer));
+    dispatch(loadingAction.pause(reducer));
   }
 };
 

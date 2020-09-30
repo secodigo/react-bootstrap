@@ -10,7 +10,7 @@ const Usuario = () => {
         search: '/api/v1/common/search/',
         crud: '/api/v1/common/crud/',
         entity: 'user',
-        filterDefault: 'nomeusa'
+        filterDefault: 'name'
       }}
     />
   );

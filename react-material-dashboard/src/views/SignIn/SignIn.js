@@ -49,7 +49,7 @@ const SignIn = () => {
                     {t('ENTRE_COM_DADOS')}
                   </Typography>
                   <Input name="username" typefield="outlined" />
-                  <Input name="password" typefield="outlined" />
+                  <Input name="password" typefield="outlined" type="password" />
                   <AsyncButton
                     fullWidth
                     type="submit"

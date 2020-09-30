@@ -18,7 +18,7 @@ export const types = {
 };
 
 function createCrudReducerWithNamedType(reducerName = '') {
-  return function counter(state = initialState, action) {
+  return (state = initialState, action) => {
     switch (action.type) {
       case `${types.LOADING}_${reducerName}`: {
         return { ...state, loading: action.loading };

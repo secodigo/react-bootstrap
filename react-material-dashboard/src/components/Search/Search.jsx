@@ -2,19 +2,20 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
-import Table from 'components/Table';
+import { Table } from 'components';
 import { useSelector, useDispatch } from 'react-redux';
 import defaultActions from 'store/actions/defaultActions';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Dialog } from '@material-ui/core';
 import { useTheme } from '@material-ui/styles';
+import { useField } from 'formik';
 import Input from './Input';
 import useStyles from './styles';
 
-const Search = ({ reducer, endPoint, title }) => {
+const Search = ({ reducer, endPoint, title, name }) => {
+  const [field, meta, helpers] = useField(name);
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const [selectedRows, setSelectedRows] = useState([]);
   const dispatch = useDispatch();
   const theme = useTheme();
   const matchesXS = useMediaQuery(theme.breakpoints.only('xs'));
@@ -38,30 +39,45 @@ const Search = ({ reducer, endPoint, title }) => {
     dispatch(defaultActions.list(reducer, endPoint, params));
   };
 
+  const getFieldValue = () => {
+    return field.value ? field.value : [];
+  };
+
   const checkedRows = (rows, row) => {
     if (row === undefined) {
-      setSelectedRows(rows);
+      helpers.setValue(rows);
       return;
     }
     if (row?.tableData?.checked) {
-      if (selectedRows.filter((item) => item.id === row.id).length === 0) {
-        setSelectedRows([...selectedRows, { ...row }]);
+      if (getFieldValue().filter((item) => item.id === row.id).length === 0) {
+        helpers.setValue([...getFieldValue(), { ...row }]);
       }
       return;
     }
-    setSelectedRows(rows.filter((item) => item.id !== row.id));
+    helpers.setValue(rows.filter((item) => item.id !== row.id));
   };
 
   const removeRow = (row) => {
-    setSelectedRows(selectedRows.filter((item) => item.id !== row.id));
+    helpers.setValue(getFieldValue().filter((item) => item.id !== row.id));
+  };
+
+  const onSelectTag = (value) => {
+    if (getFieldValue().filter((item) => item.id === value.id).length === 0) {
+      helpers.setValue([...getFieldValue(), { ...value }]);
+    }
   };
 
   return (
     <>
       <Input
-        onClickSearch={handleOpen}
-        itens={selectedRows}
+        error={meta.error}
+        onOpenSearch={handleOpen}
+        itens={getFieldValue()}
         onDelete={removeRow}
+        onSearchOptions={(value) => fetchRegisters(value)}
+        options={domains}
+        onSelectTag={onSelectTag}
+        label={title}
       />
       <Dialog
         fullScreen={matchesXS}

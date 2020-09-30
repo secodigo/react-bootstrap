@@ -27,7 +27,7 @@ const Table = ({
     }
   };
 
-  const filters = () => {
+  const columns = () => {
     const array = [];
     if (header) {
       Object.entries(header).map((item) => {
@@ -39,7 +39,6 @@ const Table = ({
     }
     return array;
   };
-
   return (
     <Card {...rest} className={clsx(classes.root, className)}>
       <CardContent className={classes.content}>
@@ -57,7 +56,7 @@ const Table = ({
             </Grid>
             <MaterialTable
               isLoading={loading}
-              columns={filters()}
+              columns={columns()}
               data={domains}
               actions={[
                 navigateToEdit && {
@@ -73,15 +72,16 @@ const Table = ({
                   }
               ]}
               options={{
-                selection: true,
+                selection: onChecked,
                 toolbar: false,
                 filtering: true,
                 actionsColumnIndex: -1,
-                paginationType: 'stepped'
+                paginationType: 'stepped',
+                headerStyle: { paddingRight: 30 }
               }}
               localization={{
                 header: {
-                  actions: ''
+                  actions: 'Acões'
                 },
                 body: {
                   emptyDataSourceMessage: 'Não há registros a serem exibidos!'
